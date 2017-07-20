@@ -59,7 +59,7 @@ function incrementDebugPort(info) {
         nextPort;
     if (portAndIndex[0]) {
         nextPort = portAndIndex[0] + 1;
-        process.execArgv.splice(portAndIndex[1], 1, '--debug=' + nextPort);
+        process.execArgv.splice(portAndIndex[1], 1, '--inspect=' + nextPort);
         if (info !== undefined) {
             setChildInfo(nextPort, info);
         }
@@ -67,7 +67,7 @@ function incrementDebugPort(info) {
     return nextPort;
 }
 
-//shove the --debug at the front of arguments
+//shove the --inspect at the front of arguments
 function wrapSpawnFork(method /*, file , args, options*/) {
     var argsIndex = 2,
         file = arguments[1],
