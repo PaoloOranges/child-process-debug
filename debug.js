@@ -88,13 +88,13 @@ function wrapSpawnFork(method /*, file , args, options*/) {
     debugPort = incrementDebugPort({args: args});
     if (debugPort) {
         //only add --debug=port when they didn't already add one
-        if (!argsPortBrk[0]) {
-            args.unshift('--debug=' + debugPort);
+        //if (!argsPortBrk[0]) {
+            args.unshift('--inspect=' + debugPort);
             argsPortBrk[1] = 0;
-        }
-        if (!argsPortBrk[2] && myDebugBreak) {
+        //}
+        /* if (!argsPortBrk[2] && myDebugBreak) {
             args.splice(argsPortBrk[1] + 1, 0, '--inspect-brk');
-        }
+        } */
     }
     //in case they add more params in the future, concat new args on
     child = child_process[method].apply(child_process, [file, args, options].concat(Array.prototype.slice.call(arguments, 4)));
