@@ -25,11 +25,11 @@ function _getDebugPort(argv) {
         if (typeof argv[i] !== 'string') {
             continue;
         }
-        if (argv[i] === '--debug-brk') {
+        if (argv[i] === '--inspect-brk') {
             debugBreak = true;
             continue;
         }
-        if (debugIndex === -1 && argv[i].indexOf('--debug') !== -1) {
+        if (debugIndex === -1 && argv[i].indexOf('--inspect') !== -1) {
             port = parseInt(argv[i].substr(8), 10);
             if (!port) {
                 port = 5858;
@@ -93,7 +93,7 @@ function wrapSpawnFork(method /*, file , args, options*/) {
             argsPortBrk[1] = 0;
         }
         if (!argsPortBrk[2] && myDebugBreak) {
-            args.splice(argsPortBrk[1] + 1, 0, '--debug-brk');
+            args.splice(argsPortBrk[1] + 1, 0, '--inspect-brk');
         }
     }
     //in case they add more params in the future, concat new args on
