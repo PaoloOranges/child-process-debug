@@ -4,12 +4,12 @@ var child_process = require('child_process'),
     childProcessDebug;
 
 //this is for the testMyPortImmutable test
-process.execArgv.push('--debug=1234');
+process.execArgv.push('--inspect=1234');
 childProcessDebug = reload('../debug.js');
 
 function toggleDebugFlag(enabled, port, enabledBrk) {
     for (var i = process.execArgv.length - 1; i >= 0; i--) {
-        if (process.execArgv[i].indexOf('--debug') !== -1) {
+        if (process.execArgv[i].indexOf('--inspect') !== -1) {
             if (enabled) {
                 enabled = false;
                 break;
@@ -19,13 +19,13 @@ function toggleDebugFlag(enabled, port, enabledBrk) {
     }
     if (enabled) {
         if (port) {
-            process.execArgv.push('--debug=' + port);
+            process.execArgv.push('--inspect=' + port);
         } else {
-            process.execArgv.push('--debug');
+            process.execArgv.push('--inspect');
         }
         if (enabledBrk) {
             global.v8DebugBreak = true;
-            process.execArgv.push('--debug-brk');
+            process.execArgv.push('--inspect-brk');
         } else {
             global.v8DebugBreak = false;
         }
@@ -67,7 +67,7 @@ exports.testSpawnArgsCommon = function(test) {
     child = hackSpawn(function() {
         test.strictEqual(arguments[0], file);
         test.strictEqual(arguments[1], args);
-        test.equal(arguments[1][0], '--debug=5859');
+        test.equal(arguments[1][0], '--inspect=5859');
         test.equal(arguments[1].length, 3);
         test.strictEqual(arguments[2], options);
         return new EventEmitter();
@@ -79,8 +79,8 @@ exports.testSpawnArgsCommon = function(test) {
     child = hackSpawn(function() {
         test.strictEqual(arguments[0], file);
         test.strictEqual(arguments[1], args);
-        test.equal(arguments[1][0], '--debug=5859');
-        test.equal(arguments[1][1], '--debug-brk');
+        test.equal(arguments[1][0], '--inspect=5859');
+        test.equal(arguments[1][1], '--inspect-brk');
         test.equal(arguments[1].length, 4);
         test.strictEqual(arguments[2], options);
         return new EventEmitter();
@@ -91,16 +91,16 @@ exports.testSpawnArgsCommon = function(test) {
 
 exports.testSpawnArgsTwoBrks = function(test) {
     var file = 'test.js',
-        args = ['--debug-brk', '--debug-brk'],
+        args = ['--inspect-brk', '--inspect-brk'],
         child;
 
     toggleDebugFlag(false);
     toggleDebugFlag(true, undefined, true, true);
     child = hackSpawn(function() {
         test.strictEqual(arguments[0], file);
-        test.equal(arguments[1][0], '--debug=5859');
-        test.equal(arguments[1][1], '--debug-brk');
-        test.equal(arguments[1][2], '--debug-brk');
+        test.equal(arguments[1][0], '--inspect=5859');
+        test.equal(arguments[1][1], '--inspect-brk');
+        test.equal(arguments[1][2], '--inspect-brk');
         test.equal(arguments[1].length, 3);
         return new EventEmitter();
     }).spawn(file, args);
@@ -128,7 +128,7 @@ exports.testSpawnArgsNoFile = function(test) {
     child = hackSpawn(function() {
         test.strictEqual(arguments[0], file);
         test.strictEqual(arguments[1], args);
-        test.equal(arguments[1][0], '--debug=5859');
+        test.equal(arguments[1][0], '--inspect=5859');
         test.equal(arguments[1].length, 3);
         test.strictEqual(arguments[2], options);
         return new EventEmitter();
@@ -156,7 +156,7 @@ exports.testSpawnArgsOnlyOptions = function(test) {
     child = hackSpawn(function() {
         test.strictEqual(arguments[0], file);
         test.ok(Array.isArray(arguments[1]));
-        test.equal(arguments[1][0], '--debug=5859');
+        test.equal(arguments[1][0], '--inspect=5859');
         test.equal(arguments[1].length, 1);
         test.strictEqual(arguments[2], options);
         return new EventEmitter();
@@ -182,7 +182,7 @@ exports.testSpawnArgsOnlyFile = function(test) {
     child = hackSpawn(function() {
         test.strictEqual(arguments[0], file);
         test.ok(Array.isArray(arguments[1]));
-        test.equal(arguments[1][0], '--debug=5859');
+        test.equal(arguments[1][0], '--inspect=5859');
         test.equal(arguments[1].length, 1);
         return new EventEmitter();
     }).spawn(file);
@@ -208,7 +208,7 @@ exports.testSpawnArgsOnlyArgs = function(test) {
     child = hackSpawn(function() {
         test.strictEqual(arguments[0], file);
         test.ok(Array.isArray(arguments[1]));
-        test.equal(arguments[1][0], '--debug=5859');
+        test.equal(arguments[1][0], '--inspect=5859');
         test.equal(arguments[1].length, 3);
         return new EventEmitter();
     }).spawn(args);
@@ -218,7 +218,7 @@ exports.testSpawnArgsOnlyArgs = function(test) {
 
 exports.testSpawnIgnoreDebug = function(test) {
     var file = process.execPath,
-        args = [0, '--debug=9999'],
+        args = [0, '--inspect=9999'],
         child;
 
     toggleDebugFlag(false);
@@ -234,7 +234,7 @@ exports.testSpawnIgnoreDebug = function(test) {
     hackSpawn(function() {
         test.strictEqual(arguments[0], file);
         test.strictEqual(arguments[1], args);
-        test.equal(arguments[1][1], '--debug=9999');
+        test.equal(arguments[1][1], '--inspect=9999');
         test.equal(arguments[1].length, 2);
         return new EventEmitter();
     }).spawn(args);
@@ -245,8 +245,8 @@ exports.testSpawnIgnoreDebug = function(test) {
     hackSpawn(function() {
         test.strictEqual(arguments[0], file);
         test.strictEqual(arguments[1], args);
-        test.equal(arguments[1][1], '--debug=9999');
-        test.equal(arguments[1][2], '--debug-brk');
+        test.equal(arguments[1][1], '--inspect=9999');
+        test.equal(arguments[1][2], '--inspect-brk');
         test.equal(arguments[1].length, 3);
         return new EventEmitter();
     }).spawn(args);
@@ -306,8 +306,8 @@ exports.testDebugBreak = function(test) {
 
 exports.testMyPortImmutable = function(test) {
     toggleDebugFlag(false);
-    process.execArgv.push('--debug=9999');
-    process.execArgv.push('--debug-brk');
+    process.execArgv.push('--inspect=9999');
+    process.execArgv.push('--inspect-brk');
     //this *shouldn't* change the actual port that childProcessDebug reports, like ever
     test.equal(childProcessDebug.port(), 1234);
     test.equal(childProcessDebug.debugBreak(), false);
