@@ -15,7 +15,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/fastest963/child-process-debug.git"
+    "url": "git://github.com/PaoloOranges/child-process-debug.git"
   },
   "keywords": [
     "child_process",
@@ -24,7 +24,7 @@
     "debug",
     "debugger"
   ],
-  "author": "James Hartig <fastest963@gmail.com>",
+  "author": "Paolo Oranges <paolo@paoloorange.com>",
   "license": "MIT",
   "readmeFilename": "README.md"
 }

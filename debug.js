@@ -32,7 +32,7 @@ function _getDebugPort(argv) {
         if (debugIndex === -1 && argv[i].indexOf('--inspect') !== -1) {
             port = parseInt(argv[i].substr(8), 10);
             if (!port) {
-                port = 5858;
+                port = 9229;
             }
             debugIndex = i;
         }
@@ -87,7 +87,7 @@ function wrapSpawnFork(method /*, file , args, options*/) {
     argsPortBrk = _getDebugPort(args);
     debugPort = incrementDebugPort({args: args});
     if (debugPort) {
-        //only add --debug=port when they didn't already add one
+        //only add --inspect=port when they didn't already add one
         //if (!argsPortBrk[0]) {
             args.unshift('--inspect=' + debugPort);
             argsPortBrk[1] = 0;

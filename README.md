@@ -10,7 +10,7 @@ var childProcessDebug = require('child-process-debug');
 
 for (var i = 0; i < 4; i++) {
     //if this script wasn't run with --inspect this will spawn node example.js [0-3]
-    //if this script was run with --inspect, this will spawn node --debug=[9229-9232] example.js [0-3]
+    //if this script was run with --inspect, this will spawn node --inspect=[9229-9233] example.js [0-3]
     childProcessDebug.spawn(['example.js', i]);
 }
 ```
