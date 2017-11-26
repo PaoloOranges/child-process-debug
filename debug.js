@@ -29,11 +29,15 @@ function _getDebugPort(argv) {
             debugBreak = true;
             continue;
         }
-        if (debugIndex === -1 && argv[i].indexOf('--inspect') !== -1) {
-            port = parseInt(argv[i].substr(8), 10);
+        if (debugIndex === -1) {
+            var pattern = '(?:--inspect(?:-brk)?=)(?:[\\d]+:)?([\\d]+)';
+            var matchPort = argv[i].match(pattern);
+            if(matchPort){
+                port = parseInt(matchPort[1], 10);
+            }
             if (!port) {
                 port = 9229;
-            }
+            }                
             debugIndex = i;
         }
     }
