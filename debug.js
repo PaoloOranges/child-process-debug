@@ -27,7 +27,6 @@ function _getDebugPort(argv) {
         }
         if (argv[i].match('--inspect-brk')) {
             debugBreak = true;
-            continue;
         }
         if (debugIndex === -1) {
             var pattern = '(?:--inspect(?:-brk)?=)(?:[\\d]+:)?([\\d]+)';
