@@ -1,3 +1,11 @@
 var debug_process = require('./debug.js')
 
-console.log('test %d ', debug_process.port);
+const childScript = 'testChild.js';
+
+const forked = debug_process.fork(childScript);
+
+forked.on('message', (msg) => {
+    console.log('Message from child', msg);
+  });
+  
+  forked.send({ hello: 'world' });
